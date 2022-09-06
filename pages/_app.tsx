@@ -1,11 +1,19 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import Navbar from "../components/Navbar"
+import Layout from "../components/Layout"
+import { store } from '../store'
+import { Provider } from 'react-redux'
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
   <>
-   <Navbar/>
-   <Component {...pageProps} />
+  
+   <Provider store={store}>
+     <Layout>
+       <Component {...pageProps} />
+     </Layout>
+  </Provider>
+  
   </>
   )
 }

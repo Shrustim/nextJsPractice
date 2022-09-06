@@ -30,6 +30,8 @@ const About: NextPage = () => {
             quality={100}
           />
           
+          <img src="https://images.pexels.com/photos/265940/pexels-photo-265940.jpeg" width="700"  height="500"/> 
+         
           {/* <img src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg" width="700"  height="500"/> 
           <img src="https://images.pexels.com/photos/13058811/pexels-photo-13058811.jpeg" width="700"  height="500"/> */}
          
