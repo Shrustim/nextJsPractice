@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
+    "mysql2": "^2.3.3",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.2"
   },
   "devDependencies": {
+    "@types/mysql2": "github:types/mysql2",
     "@types/node": "18.7.14",
     "@types/react": "18.0.18",
     "@types/react-dom": "18.0.6",
