@@ -1,11 +1,11 @@
-import { query } from "../../lib/db";
-// import * as mysql from 'mysql2/promise';
+import { query } from "../../../lib/db";
+import { apiHandler } from '../../../helpers/api';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default async  function handler(
+const handler = async  (
   req: NextApiRequest,
   res: NextApiResponse
-) {
+) =>{
     // let connection = await mysql.createConnection({
     //     host: 'localhost',
     //     user: 'root',
@@ -50,3 +50,4 @@ export default async  function handler(
 }
 
 
+export default apiHandler(handler);
