@@ -2,10 +2,12 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import {useState,useEffect} from "react"
 import api from "../src/restApi/index";
+import { useSelector } from 'react-redux';
 const apiobj = new api();
 const Profile: NextPage = () => {
   const [users,setUsers] = useState([]);
   const [isLoading,setIsLoading] = useState(false);
+  const loginData = useSelector((state:any) => state.login);
   useEffect(()=>{
     // getUserList();
   },[])
@@ -14,7 +16,7 @@ const Profile: NextPage = () => {
     const response: any = await apiobj.request("users/", {}, "get");
 		setUsers(response.data)
     setIsLoading(false);
-  }
+  } 
 
 // console.log("users",users)
   return (
@@ -29,7 +31,9 @@ const Profile: NextPage = () => {
               <a >profile</a>
             </Link>
             <br/>
-           
+            
+           <h2>Email: {loginData.isLogin ? loginData.userinfo.email : null}</h2>
+           <h2>Name: {loginData.isLogin ? loginData.userinfo.firstName : null}</h2>
              <br/>
           <br/>
           {

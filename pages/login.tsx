@@ -9,18 +9,21 @@ import api from "../src/restApi/index";
 import {AppDispatch} from "../src/store/store"
 import { NextResponse } from 'next/server'
 import {setLogin,fetchUserById} from "../src/store/reducers/loginSlice"
+import ForgotPasswordModal from "../src/components/ForgotPasswordModal"
 import Cookies from 'js-cookie'
 const apiobj = new api();
 const Login: NextPage = () => {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>();
   const [errorMessage,setErrorMessage] = useState("");
+  const [isForgotPasswordModal,setIsForgotPasswordModal] = useState(false);
+  const [forgotpasswordEmail,setIsForgotPasswordEmail] = useState("");
+
   const onFinish = async(values: any) => {
-    console.log('Success:', values);
+    // console.log('Success:', values);
     
     try {
       const response: any = await apiobj.requestWithoutToken("users/authenticate", values, "post");
-      // localStorage.setItem("token", response.data.token);
       var token_data: any = jwt_decode(response.data.token);
       const responsee = NextResponse.next()
       Cookies.set('token', response.data.token, { expires: 30 })
@@ -29,8 +32,8 @@ const Login: NextPage = () => {
       setErrorMessage("")
       router.push('/');
     }catch(error: any){
-      console.log(error);
-      console.log(error.message)
+      // console.log(error);
+      // console.log(error.message)
       setErrorMessage(error.message)
     }
     
@@ -46,7 +49,7 @@ const Login: NextPage = () => {
         lg={{ span: 10 }}  xl={{ span: 8 }} xxl={{ span: 8 }}>
           <br/>
           <br/>
-          <Card title="Login" style={{ width: '100%' }}>
+          <Card title="Sign In" style={{ width: '100%' }}>
              <Form
                 name="basic"
                 labelCol={{ span: 8 }}
@@ -60,25 +63,46 @@ const Login: NextPage = () => {
                   label="Email"
                   name="email"
                 
-                  rules={[{ required: true, message: 'Please enter your email.' }]}
+                  rules={[{ required: true, message: 'Please enter your email.' },
+                  {
+                    type: 'email',
+                    message: 'The input is not valid email.',
+                  },]}
                 >
-                  <Input   />
+                  <Input  onChange={(e)=>setIsForgotPasswordEmail(e.target.value) } />
                 </Form.Item>
 
                 <Form.Item
                   label="Password"
                   name="password"
                 
-                  rules={[{ required: true, message: 'Please enter your password.' }]}
+                  rules={[{ required: true, message: 'Please enter your password.' },
+                  
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || value.length > 5 ) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Password must contain a minimum of 6 characters.'));
+                         
+                    },
+                  }),]}
                 >
                   <Input.Password   />
                 
                 </Form.Item>
-                <span className='ant-form-item-explain-error'>{errorMessage}</span>
-                {/* <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 5, span: 16 }}>
-                  <Checkbox>Remember me</Checkbox>
-                </Form.Item> */}
-                <br/>
+                {errorMessage ? 
+                 <>
+                  <span className='ant-form-item-explain-error'>{errorMessage}</span>
+                  <br/>
+                 </>:null}
+               
+                <Form.Item>
+                 
+                  <a className={styles.login_form_forgot} href="#" onClick={() => setIsForgotPasswordModal(true)} >
+                    Forgot password
+                  </a>
+                </Form.Item>
                 <Form.Item >
                   <Button type="primary" htmlType="submit">
                     Login
@@ -86,9 +110,17 @@ const Login: NextPage = () => {
                   <Button htmlType="button" className={styles.CancelButton} onClick={() => router.push('/')}>
                     Cancel
                   </Button>
+                  <Button type="link" htmlType="button" onClick={() => router.push('/signup')}>
+                  Sign Up
+                  </Button>
                 </Form.Item>
               </Form>
         </Card>
+        <ForgotPasswordModal
+         isModalShow={isForgotPasswordModal} 
+         forgotpasswordEmail={forgotpasswordEmail}
+         setIsForgotPasswordModal={setIsForgotPasswordModal}
+        />
           {/* <h2>Login</h2> */}
          
         </Col>

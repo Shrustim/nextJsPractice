@@ -8,7 +8,7 @@ function handler(req: NextApiRequest,
     res: NextApiResponse) {
     const getUserById = async() =>  {
         if(req.method === 'GET'){
-            const querySql ="SELECT id,email,firstName,lastName,role FROM users where id ='"+req.query.id+"' ";
+            const querySql ="SELECT id,email,firstName,lastName,role FROM users where id ='"+req.query.id+"' AND isActive = 1 AND isDeleted = 1";
             const data = await query({ querys: querySql, values: [] });
             res.status(200).json(data)
         }

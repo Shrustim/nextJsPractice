@@ -15,9 +15,10 @@ function handler(req: any, res: any) {
             const querySqlCheck ="SELECT id FROM users WHERE email='"+email+"'";
             const dataCheck:any = await query({ querys: querySqlCheck, values: [] });
             if (dataCheck.length == 0) {
+                const today = new Date();
                   // const user = users.find((u: any) => u.username === username && u.password === password);
-                const querySql ='INSERT INTO users (email, password, firstName, lastName)'+
-                'VALUES ("'+email+'", "'+password+'", "'+firstName+'", "'+lastName+'")';
+                const querySql ='INSERT INTO users (email, password, firstName, lastName, createdDttm,lastLoggedDttm)'+
+                'VALUES ("'+email+'", "'+password+'", "'+firstName+'", "'+lastName+'","'+ today.getTime()+'","'+ today.getTime()+'")';
                 const data:any = await query({ querys: querySql, values: [] });
                 
                 if (!data.insertId) throw 'Information is incorrect';

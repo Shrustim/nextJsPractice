@@ -11,11 +11,14 @@ function handler(req: any, res: any) {
         const { email, password } = req.body;
         const isValidate = UserValidation(req.body);
         if(isValidate === true){
+                const today = new Date();
                 // const user = users.find((u: any) => u.username === username && u.password === password);
-                const querySql ="SELECT id FROM users WHERE email='"+email+"' AND password='"+password+"' AND isActive = 1";
+                const querySql ="SELECT id FROM users WHERE email='"+email+"' AND password='"+password+"' AND isActive = 1 AND isDeleted = 0";
                 const data:any = await query({ querys: querySql, values: [] });
                 if (data.length == 0) throw 'Email or password is incorrect';
-            
+                
+                const querySql2 ='UPDATE users SET lastLoggedDttm = "'+ today.getTime()+'"  WHERE id = '+data[0].id+'';
+                 await query({ querys: querySql2, values: [] });
                 // create a jwt token that is valid for 7 days
                 const token = jwt.sign({ sub: data[0].id }, JWTSecret, { expiresIn: '7d' });
             
